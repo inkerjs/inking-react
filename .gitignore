@@ -1,0 +1,10 @@
+node_modules
+coverage
+.DS_Store
+*.log
+.idea
+lib
+src/example.js
+src/example.ts
+.build.es5
+.build.es6

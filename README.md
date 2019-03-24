@@ -1,2 +1,3 @@
-# tinar-react
-React bindings for Tinar
+# inking-react
+
+React bindings for [Inking](https://github.com/inkerjs/inking)
