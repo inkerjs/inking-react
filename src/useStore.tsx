@@ -1,18 +1,18 @@
-import { useCallback, useState } from 'react'
+// import { useCallback, useState } from 'react'
 
-export function useForceUpdate() {
-  const [, setTick] = useState(0)
+// export function useForceUpdate() {
+//   const [, setTick] = useState(0)
 
-  const update = useCallback(() => {
-    setTick(tick => tick + 1)
-  }, [])
+//   const update = useCallback(() => {
+//     setTick(tick => tick + 1)
+//   }, [])
 
-  return update
-}
+//   return update
+// }
 
-export default function useStore(store, mapState) {
-  const update = () => {}
-  const autorun(() => {
-    state
-  })
-}
+// export default function useStore(store, mapState) {
+//   const update = () => {}
+//   const autorun(() => {
+//     state
+//   })
+// }

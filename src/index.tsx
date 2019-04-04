@@ -1,58 +1,39 @@
-import { autorun, reaction } from 'inking'
-import React from 'react'
+import { reaction } from 'inking'
+import React, { useContext, useState } from 'react'
+import { getInstanceMethodNames } from './utils'
 
-export function useForceUpdate() {
-  const [, setTick] = React.useState(0)
+const StoreContext = React.createContext({
+  store: null
+})
 
-  const update = React.useCallback(() => {
-    setTick(tick => tick + 1)
-  }, [])
-
-  return update
+function bindActions(instance) {
+  const methods = getInstanceMethodNames(instance, Object.prototype)
+  methods.forEach(key => {
+    instance[key] = instance[key].bind(instance)
+  })
 }
 
-const InkingContext = React.createContext({
-  state: null,
-  dispatch: null
-})
+export function createReactiveStore<T>(store: T) {
+  bindActions(store)
 
-export const createStore = (initialState, reducer) => ({
-  Provider({ children }) {
-    const [state, dispatch] = React.useReducer(reducer, initialState)
-    const contextValue = { state, dispatch }
-    return <InkingContext.Provider value={contextValue as any}>{children}</InkingContext.Provider>
-  },
-  useInking() {
-    const context = React.useContext(InkingContext)
-    return { state: context.state, dispatch: context.dispatch }
+  return {
+    ReactiveProvider({ children }) {
+      return <StoreContext.Provider value={{ store: store as any }}>{children}</StoreContext.Provider>
+    },
+    useReactive(mapperFn: any) {
+      const context = useContext(StoreContext)
+      const contextStore = context.store || store
+      const [, setTick] = useState(0)
+      reaction(
+        () => {
+          const _collection = mapperFn(store) // just for dependencies collection
+        },
+        () => {
+          // force update
+          setTick(tick => tick + 1)
+        }
+      )
+      return mapperFn(store)
+    }
   }
-})
-
-const InkingContext2 = React.createContext({
-  store: {}
-})
-
-export const createReactiveStore = store => ({
-  ReactiveProvider({ children }) {
-    return <InkingContext2.Provider value={{ store }}>{children}</InkingContext2.Provider>
-  },
-  useReactive(mapperFn: any) {
-    const context = React.useContext(InkingContext2)
-    const contextStore = context.store
-    const [, setTick] = React.useState(0)
-    reaction(
-      () => {
-        const boundRes = mapperFn(store)
-        Object.keys(boundRes).forEach(key => {
-          if (typeof contextStore[key] === 'function') {
-            contextStore[key] = contextStore[key].bind(contextStore)
-          }
-        })
-      },
-      () => {
-        setTick(tick => tick + 1)
-      }
-    )
-    return mapperFn(store)
-  }
-})
+}

@@ -1,6 +1,6 @@
 {
   "name": "inking-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React binding for inking.",
   "main": "lib/index.js",
   "module": "lib/index.module.js",
@@ -23,11 +23,11 @@
     "dev": "tsc --watch",
     "test:all": "yarn lint && jest --coverage",
     "test:watch": "jest --watch",
-    "tsc-build": "tsc",
-    "pub-build": "ts-node scripts/build.ts",
+    "build:tsc": "tsc",
+    "build:rollup": "ts-node scripts/build.ts",
     "prettier": "prettier --write './**/*.ts' './**/*.js'",
     "lint": "tslint './src/**/*.?(ts|tsx)'",
-    "prepublishOnly": "yarn run lint && yarn test:all && yarn pub-build"
+    "prepublishOnly": "yarn run lint && yarn run build:tsc"
   },
   "author": "fi3ework",
   "license": "MIT",
@@ -40,7 +40,8 @@
   },
   "peerDependencies": {
     "inking": "^0.0.1",
-    "react": "^16.3.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "homepage": "https://github.com/inkerjs/inking-react",
   "dependencies": {
@@ -49,7 +50,8 @@
   "devDependencies": {
     "@types/jest": "^23.0.0",
     "@types/node": "^11.11.4",
-    "@types/react": "^16.8.8",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.3",
     "coveralls": "^3.0.3",
     "envify": "^4.1.0",
     "fs-extra": "^7.0.1",

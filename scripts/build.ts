@@ -44,7 +44,7 @@ function runTypeScriptBuild(outDir, target, declarations) {
   options.noEmitHelpers = true
   if (declarations) options.declarationDir = path.resolve('.', 'lib')
 
-  const rootFile = path.resolve('src', 'index.ts')
+  const rootFile = path.resolve('src', 'index.tsx')
   const host = ts.createCompilerHost(options, true)
   const prog = ts.createProgram([rootFile], options, host)
   const result = prog.emit()
